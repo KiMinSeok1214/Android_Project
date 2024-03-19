@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.example.project_last.databinding.ActivityAddDiaryBinding
 import java.util.Random
 
+
 class AddDiaryActivity : BaseActivity() {
 
     val binding by lazy { ActivityAddDiaryBinding.inflate(layoutInflater) }
