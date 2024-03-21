@@ -3,6 +3,7 @@ package com.example.project_last
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.DatePicker
 import android.widget.Toast
@@ -12,7 +13,7 @@ import java.util.Random
 
 
 class AddDiaryActivity : BaseActivity() {
-
+    var star_late:Float = 0.0F
     val binding by lazy { ActivityAddDiaryBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,9 @@ class AddDiaryActivity : BaseActivity() {
                 }
             }, year, month, day);
             datePicker.show()
+        }
+        binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            star_late = rating
         }
     }
 
