@@ -404,13 +404,13 @@ class ItemDB(context: Context):
     fun getCategory() : ArrayList<String> {
         val db = this.readableDatabase
 
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME " + "WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG = ?", arrayOf("""", """"))
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = '' and $COL17_HASHTAG = ''", null)
         var str:String
 
         val list = ArrayList<String>()
         cursor?.let {
             while (cursor.moveToNext())
-                list.add(cursor.getString(17) + cursor.getString(18) + cursor.getString(19) + cursor.getString(20))
+                list.add(cursor.getString(17) + " " + cursor.getString(18) + " " + cursor.getString(19) + " " + cursor.getString(20))
         }
         return list
     }

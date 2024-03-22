@@ -40,9 +40,9 @@ class ShowCategoryActivity:BaseActivity() {
                 list.add(binding.edCategory4.text.toString().trim())
                 db.insertCategory(list  )
                 binding.tvResult.setText("")
-                showTxt("Data inserted -> ${binding.edCategory1.text.toString().trim()}")
-                showTxt("${binding.edCategory2.text.toString().trim()}")
-                showTxt("${binding.edCategory3.text.toString().trim()}")
+                showTxt("Data inserted -> ${binding.edCategory1.text.toString().trim()} ")
+                showTxt("${binding.edCategory2.text.toString().trim()} ")
+                showTxt("${binding.edCategory3.text.toString().trim()} ")
                 showTxt("${binding.edCategory4.text.toString().trim()}")
                 clearEditTexts()
             } catch (e: Exception) {
