@@ -131,7 +131,7 @@ class ItemDB(context: Context):
     fun getAllData(): ArrayList<Item> {
         var itemList: ArrayList<Item> = ArrayList()
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT NULL", null)
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT ''", null)
 
         cursor?.run {
             while (cursor.moveToNext()) {
@@ -147,8 +147,7 @@ class ItemDB(context: Context):
         var hashtag = ArrayList<String>()
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME " +
-                "WHERE $COL2_REST_NAME IS NULL and $COL18_CATEGORY1 IS NULL", null)
-        var str:String
+                "WHERE $COL2_REST_NAME = '' and $COL18_CATEGORY1 = ''", null)
 
         cursor?.let {
             while (cursor.moveToNext())
@@ -197,8 +196,7 @@ class ItemDB(context: Context):
         wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag))
 
         // item인 경우
-        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME " +
-                "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag))
+        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag))
 
         cursor?.let {
             while (cursor.moveToNext()) {
@@ -363,43 +361,6 @@ class ItemDB(context: Context):
         db.delete(TABLE_NAME, "category1 = ? and category2 = ? and category3 = ? and category4 = ?", list)
     }
 
-
-    /*
-    fun renameHashtag(hashtag:String, newhashtag:String) {
-        val wdb = writableDatabase
-        val rdb = readableDatabase
-        val cv = ContentValues().apply {
-            put(COL17_HASHTAG, newhashtag)
-        }
-
-        if (!checkHashtagExist(newhashtag)) {
-            // 해시태그인 경우
-            wdb.update(TABLE_NAME, cv, "hashtag = ?", arrayOf(hashtag))
-
-            // item인 경우
-            val cursor = rdb.rawQuery(
-                "SELECT * FROM $TABLE_NAME " +
-                        "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag)
-            )
-
-            cursor?.let {
-                while (cursor.moveToNext()) {
-                    var oldstr = cursor.getString(16)
-                    val newstr = oldstr.replace(hashtag, newhashtag)
-                    val cv = ContentValues().apply {
-                        put(COL17_HASHTAG, newstr)
-                    }
-                    wdb.update(
-                        TABLE_NAME, cv, "$COL17_HASHTAG = ?",
-                        arrayOf(oldstr)
-                    )
-                }
-            }
-            cursor.close()
-        }
-    }
-     */
-
     //
     fun getCategory() : ArrayList<String> {
         val db = this.readableDatabase
@@ -414,15 +375,6 @@ class ItemDB(context: Context):
         }
         return list
     }
-
-    fun checkCategoryExist(nowHashtag: String): Boolean {
-        val hashtags = getHashtag()
-        return hashtags.contains(nowHashtag)
-    }
-
-
-    /*
-    // 카테고리를 수정하는 함수
     fun renameCategory(oldlist : ArrayList<String>, newlist : ArrayList<String>) {
         val wdb = writableDatabase
         val rdb = readableDatabase
@@ -432,32 +384,6 @@ class ItemDB(context: Context):
             put(COL20_CATEGORY3, newlist[2])
             put(COL21_CATEGORY4, newlist[3])
         }
-
-        if (!checkHashtagExist(newhashtag)) {
-            // 해시태그인 경우
-            wdb.update(TABLE_NAME, cv, "hashtag = ?", arrayOf(hashtag))
-
-            // item인 경우
-            val cursor = rdb.rawQuery(
-                "SELECT * FROM $TABLE_NAME " +
-                        "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag)
-            )
-
-            cursor?.let {
-                while (cursor.moveToNext()) {
-                    var oldstr = cursor.getString(16)
-                    val newstr = oldstr.replace(hashtag, newhashtag)
-                    val cv = ContentValues().apply {
-                        put(COL17_HASHTAG, newstr)
-                    }
-                    wdb.update(
-                        TABLE_NAME, cv, "$COL17_HASHTAG = ?",
-                        arrayOf(oldstr)
-                    )
-                }
-            }
-            cursor.close()
-        }
+        wdb.update(TABLE_NAME, cv, "$COL18_CATEGORY1 = ? AND  $COL19_CATEGORY2 = ? AND  $COL20_CATEGORY3 = ? AND  $COL21_CATEGORY4 = ?", arrayOf(oldlist[0], oldlist[1], oldlist[2], oldlist[3]))
     }
-    */
 }
