@@ -13,7 +13,6 @@ class ShowCategoryActivity:BaseActivity() {
 
         insertCago()
         deleteCago()
-        renameCago()
         getAllCago()
     }
 
@@ -29,8 +28,6 @@ class ShowCategoryActivity:BaseActivity() {
             edCategory2.setText("")
             edCategory3.setText("")
             edCategory4.setText("")
-            ed.setText("")
-            etDeletehashtag.setText("")
         }
     }
     private fun insertCago(){
@@ -54,7 +51,7 @@ class ShowCategoryActivity:BaseActivity() {
         }
     }
 
-    private fun deleteCate() {
+    private fun deleteCago() {
         binding.btnDeletecago.setOnClickListener {
             try {
                 val deletecategorylist = ArrayList<String>()
@@ -75,7 +72,7 @@ class ShowCategoryActivity:BaseActivity() {
         }
     }
 
-    private fun getAllDb() {
+    private fun getAllCago() {
         binding.btnAllcago.setOnClickListener {
             try {
                 Log.d("ki", "check")
