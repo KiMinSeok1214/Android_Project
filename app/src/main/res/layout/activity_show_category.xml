@@ -33,7 +33,6 @@
                 android:inputType="text"
                 android:id="@+id/ed_category1"/>
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -77,8 +76,6 @@
                 android:hint="category3"
                 android:inputType="text"
                 android:id="@+id/ed_category3" />
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -100,13 +97,7 @@
                 android:hint="category4"
                 android:inputType="text"
                 android:id="@+id/ed_category4" />
-
-
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,104 +125,93 @@
                 android:textSize="20sp"
                 android:text="DELETE"
                 android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="RECATEGORY1 : "
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="category1"
+                android:inputType="text"
+                android:id="@+id/ed_rcategory1"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="RECATEGORY1 : "
-                    android:textStyle="bold" />
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="RECATEGORY2 : "
+                android:textStyle="bold" />
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:hint="category1"
-                    android:inputType="text"
-                    android:id="@+id/ed_rcategory1"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="RECATEGORY2 : "
-                    android:textStyle="bold" />
+                android:layout_weight="4"
+                android:hint="category2"
+                android:inputType="text"
+                android:id="@+id/ed_rcategory2" />
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:hint="category2"
-                    android:inputType="text"
-                    android:id="@+id/ed_rcategory2" />
+        </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="RECATEGORY3 : "
-                    android:textStyle="bold" />
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="RECATEGORY3 : "
+                android:textStyle="bold" />
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:hint="category3"
-                    android:inputType="text"
-                    android:id="@+id/ed_rcategory3" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="RECATEGORY4 : "
-                    android:textStyle="bold" />
+                android:layout_weight="4"
+                android:hint="category3"
+                android:inputType="text"
+                android:id="@+id/ed_rcategory3" />
+        </LinearLayout>
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:hint="category4"
-                    android:inputType="text"
-                    android:id="@+id/ed_rcategory4" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="RECATEGORY4 : "
+                android:textStyle="bold" />
 
-
-            </LinearLayout>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="category4"
+                android:inputType="text"
+                android:id="@+id/ed_rcategory4" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -271,22 +251,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ToggleButton
-            android:id="@+id/btn_toggleButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="false"
-            android:text="ToggleButton"
-            android:textOff="CLOSE"
-            android:textOn="OPEN"
-            android:visibility="gone"
-            />
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -300,7 +264,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="20sp" />
-
     </ScrollView>
 
 </LinearLayout>
