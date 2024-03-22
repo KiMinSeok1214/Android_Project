@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
         binding.btnCategory.setOnClickListener {
-            val intent=Intent(this,TestCategoryActivity::class.java)
+            val intent=Intent(this, ShowCategoryActivity::class.java)
             startActivity(intent)
         }
     }
