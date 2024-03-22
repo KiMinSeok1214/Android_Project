@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.content.contentValuesOf
 
 class ItemDB(context: Context):
+
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
@@ -246,4 +247,217 @@ class ItemDB(context: Context):
             cursor.close()
         }
     }
+
+    // h1을 -> h2로 바꾸고 h1을 삭제
+    fun combineH1ToH2(hashtag1:String, hashtag2:String) {
+        val wdb = writableDatabase
+        val rdb = readableDatabase
+
+        // 해시태그인 경우 삭제
+        wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag1))
+
+        // item인 경우 h1 -> h2로 rename
+        val cursor = rdb.rawQuery(
+            "SELECT * FROM $TABLE_NAME " +
+                    "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag1)
+        )
+        cursor?.let {
+            while (cursor.moveToNext()) {
+                var oldstr = cursor.getString(16)
+                val newstr = oldstr.replace(hashtag1, hashtag2)
+                val cv = ContentValues().apply {
+                    put(COL17_HASHTAG, newstr)
+                }
+                wdb.update(
+                    TABLE_NAME, cv, "$COL17_HASHTAG = ?",
+                    arrayOf(oldstr)
+                )
+            }
+        }
+        cursor.close()
+    }
+    // 테스트용입니다 00
+    fun insertRH(restaurant : String, hashtag: String) {
+        val db = writableDatabase
+        val item = Item(rest_name = restaurant, hashtag = hashtag)
+        insertItem(item)
+    }
+
+    // 테스트용입니다 00
+    fun getRestHASH(): ArrayList<String> {
+        val rest = ArrayList<String>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT NULL", null)
+        var str:String
+
+        cursor?.let {
+            while (cursor.moveToNext())
+                rest.add(cursor.getString(1) + "'s hashtags\n ->" + cursor.getString(16) + '\n')
+        }
+        return rest
+    }
+
+    // 테스트용입니다 00
+    fun checkRestaurantExist(rest: String): Boolean {
+        val hashtags = getRestHASH()
+        return hashtags.contains(rest)
+    }
+
+    // 테스트용입니다 00
+    fun addH2R(restaurant : String, hashtag: String) {
+        val db = writableDatabase
+        if (checkRestaurantExist(restaurant) && checkHashtagExist(restaurant)) {
+            val wdb = writableDatabase
+            val rdb = readableDatabase
+
+            // item인 경우
+            val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME " +
+                    "WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG NOT LIKE '%?%'", arrayOf(restaurant, hashtag))
+
+            cursor?.let {
+                while (cursor.moveToNext()) {
+                    val newstr = cursor.getString(16) + '\n' + hashtag
+                    val cv = ContentValues().apply {
+                        put(COL17_HASHTAG, newstr)
+                    }
+                    wdb.update(TABLE_NAME, cv, "$COL2_REST_NAME = ?",
+                        arrayOf(restaurant))
+                }
+            }
+        }
+    }
+
+    // 테스트용입니다 00
+    fun deleteH2R(restaurant : String, hashtag: String) {
+        if (checkRestaurantExist(restaurant) && checkHashtagExist(restaurant)) {
+            val wdb = writableDatabase
+            val rdb = readableDatabase
+
+            // item인 경우
+            val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME " +
+                    "WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG LIKE '%?%'", arrayOf(restaurant, hashtag))
+            cursor?.let {
+                while (cursor.moveToNext()) {
+                    var oldstr = cursor.getString(16)
+                    val newstr = oldstr.replace(hashtag, "")
+                    val cv = ContentValues().apply {
+                        put(COL17_HASHTAG, newstr)
+                    }
+                    wdb.update(TABLE_NAME, cv, "$COL2_REST_NAME = ?",
+                        arrayOf(restaurant))
+                }
+            }
+        }
+    }
+
+    // 카테고리를 추가하는 함수
+    fun insertCategory(clist : ArrayList<String>) {
+        val db = writableDatabase
+        val item = Item(category1 = clist[0], category2 = clist[1], category3 = clist[2], category4 = clist[3])
+        insertItem(item)
+    }
+    // 카테고리를 삭제하는 함수
+    fun deleteCategory(clist : ArrayList<String>) {
+        val db = writableDatabase
+        val list = arrayOf(clist[0], clist[1], clist[2], clist[3])
+        db.delete(TABLE_NAME, "category1 = ? and category2 = ? and category3 = ? and category4 = ?", list)
+    }
+
+
+    /*
+    fun renameHashtag(hashtag:String, newhashtag:String) {
+        val wdb = writableDatabase
+        val rdb = readableDatabase
+        val cv = ContentValues().apply {
+            put(COL17_HASHTAG, newhashtag)
+        }
+
+        if (!checkHashtagExist(newhashtag)) {
+            // 해시태그인 경우
+            wdb.update(TABLE_NAME, cv, "hashtag = ?", arrayOf(hashtag))
+
+            // item인 경우
+            val cursor = rdb.rawQuery(
+                "SELECT * FROM $TABLE_NAME " +
+                        "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag)
+            )
+
+            cursor?.let {
+                while (cursor.moveToNext()) {
+                    var oldstr = cursor.getString(16)
+                    val newstr = oldstr.replace(hashtag, newhashtag)
+                    val cv = ContentValues().apply {
+                        put(COL17_HASHTAG, newstr)
+                    }
+                    wdb.update(
+                        TABLE_NAME, cv, "$COL17_HASHTAG = ?",
+                        arrayOf(oldstr)
+                    )
+                }
+            }
+            cursor.close()
+        }
+    }
+     */
+
+    //
+    fun getCategory() : ArrayList<String> {
+        val db = this.readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME " + "WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG = ?", arrayOf("""", """"))
+        var str:String
+
+        val list = ArrayList<String>()
+        cursor?.let {
+            while (cursor.moveToNext())
+                list.add(cursor.getString(17) + cursor.getString(18) + cursor.getString(19) + cursor.getString(20))
+        }
+        return list
+    }
+
+    fun checkCategoryExist(nowHashtag: String): Boolean {
+        val hashtags = getHashtag()
+        return hashtags.contains(nowHashtag)
+    }
+
+
+    /*
+    // 카테고리를 수정하는 함수
+    fun renameCategory(oldlist : ArrayList<String>, newlist : ArrayList<String>) {
+        val wdb = writableDatabase
+        val rdb = readableDatabase
+        val cv = ContentValues().apply {
+            put(COL18_CATEGORY1, newlist[0])
+            put(COL19_CATEGORY2, newlist[1])
+            put(COL20_CATEGORY3, newlist[2])
+            put(COL21_CATEGORY4, newlist[3])
+        }
+
+        if (!checkHashtagExist(newhashtag)) {
+            // 해시태그인 경우
+            wdb.update(TABLE_NAME, cv, "hashtag = ?", arrayOf(hashtag))
+
+            // item인 경우
+            val cursor = rdb.rawQuery(
+                "SELECT * FROM $TABLE_NAME " +
+                        "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag)
+            )
+
+            cursor?.let {
+                while (cursor.moveToNext()) {
+                    var oldstr = cursor.getString(16)
+                    val newstr = oldstr.replace(hashtag, newhashtag)
+                    val cv = ContentValues().apply {
+                        put(COL17_HASHTAG, newstr)
+                    }
+                    wdb.update(
+                        TABLE_NAME, cv, "$COL17_HASHTAG = ?",
+                        arrayOf(oldstr)
+                    )
+                }
+            }
+            cursor.close()
+        }
+    }
+    */
 }
