@@ -39,7 +39,7 @@ class AddDiaryActivity : BaseActivity() {
             val item = Item(
                 rest_name = binding.etRestName.text.toString().trim(),
                 rest_comment = binding.etRestComment.text.toString().trim(),
-                date = binding.etDate.text.toString().trim()
+                date = binding.tvDate.text.toString().trim()
                 )
             db.insertItem(item)
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
