@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.ItemNodeBinding
 
+
 class TreeNodeAdapter(private var itemList: ArrayList<TreeNode>) : RecyclerView.Adapter<TreeNodeAdapter.RecyclerViewHolder?>() {
     private lateinit var binding: ItemNodeBinding
 
