@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project_last.databinding.ActivityAddDiaryBinding
+
 import java.util.Calendar
 import java.util.Random
 
@@ -36,30 +37,12 @@ class AddDiaryActivity : BaseActivity() {
 
         binding.ivSave.setOnClickListener {
             val item = Item(
-                0,
-                binding.etRestName.text.toString(),
-                0,
-                0,
-                Random().nextInt(5).toString(),
-                Random().nextInt(5).toDouble(),
-                binding.etRestComment.text.toString(),
-                "image_uri",
-                "address",
-                "url",
-                0,
-                "치킨",
-                2.5,
-                "menu_uri",
-                "soso",
-                15000,
-                "hasgtag",
-                "",
-                "",
-                "",
-                ""
-            )
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+                rest_name = binding.etRestName.text.toString().trim(),
+                rest_comment = binding.etRestComment.text.toString().trim(),
+                date = binding.etDate.text.toString().trim()
+                )
             db.insertItem(item)
+            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
         }
 
         binding.tvDate.setOnClickListener {

@@ -24,5 +24,9 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, TestHasgtagActivity::class.java)
             startActivity(intent)
         }
+        binding.btnCategory.setOnClickListener {
+            val intent=Intent(this, ShowCategoryActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

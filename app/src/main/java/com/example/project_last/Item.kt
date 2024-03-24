@@ -2,13 +2,13 @@ package com.example.project_last
 
 data class Item(
     var id: Int = 0, // Primary key
-    var rest_name: String,
+    var rest_name: String = "",
     var isvisit: Int = 0,
     var isdelivery: Int = 0,
     var date: String = "",
     var rest_star: Double = 0.0,
     var rest_comment: String = "",
-    var main_image_uri: String = "",
+    var main_image_uri: String ="",
     var address: String = "",
     var url: String = "",
     var isfavor: Int = 0,
