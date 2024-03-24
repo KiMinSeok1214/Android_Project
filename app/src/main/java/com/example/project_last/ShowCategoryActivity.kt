@@ -14,6 +14,7 @@ class ShowCategoryActivity:BaseActivity() {
         insertCago()
         deleteCago()
         getAllCago()
+        renameCategory()
     }
 
     private fun showTxt(text: String) {
@@ -28,6 +29,10 @@ class ShowCategoryActivity:BaseActivity() {
             edCategory2.setText("")
             edCategory3.setText("")
             edCategory4.setText("")
+            edRcategory1.setText("")
+            edRcategory2.setText("")
+            edRcategory3.setText("")
+            edRcategory4.setText("")
         }
     }
     private fun insertCago(){
@@ -86,6 +91,33 @@ class ShowCategoryActivity:BaseActivity() {
                 Log.d("ki", "${selectResult.size}")
 
                 showTxt(result)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun renameCategory() {
+        binding.btnRename.setOnClickListener{
+            try {
+                val oldlist = ArrayList<String>()
+                oldlist.add(binding.edCategory1.text.toString().trim())
+                oldlist.add(binding.edCategory2.text.toString().trim())
+                oldlist.add(binding.edCategory3.text.toString().trim())
+                oldlist.add(binding.edCategory4.text.toString().trim())
+                val newlist = ArrayList<String>()
+                newlist.add(binding.edRcategory1.text.toString().trim())
+                newlist.add(binding.edRcategory2.text.toString().trim())
+                newlist.add(binding.edRcategory3.text.toString().trim())
+                newlist.add(binding.edRcategory4.text.toString().trim())
+
+                db.renameCategory(oldlist, newlist)
+                binding.tvResult.setText("")
+                showTxt("RENAME\n ${binding.edCategory1.text.toString().trim()} -> ${binding.edRcategory1.text.toString().trim()}\n")
+                showTxt("${binding.edCategory2.text.toString().trim()} -> ${binding.edRcategory2.text.toString().trim()}\n")
+                showTxt("${binding.edCategory3.text.toString().trim()} -> ${binding.edRcategory3.text.toString().trim()}\n")
+                showTxt("${binding.edCategory4.text.toString().trim()} -> ${binding.edRcategory4.text.toString().trim()}")
+                clearEditTexts()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

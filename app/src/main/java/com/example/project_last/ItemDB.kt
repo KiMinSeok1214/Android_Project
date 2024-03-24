@@ -386,4 +386,26 @@ class ItemDB(context: Context):
         }
         wdb.update(TABLE_NAME, cv, "$COL18_CATEGORY1 = ? AND  $COL19_CATEGORY2 = ? AND  $COL20_CATEGORY3 = ? AND  $COL21_CATEGORY4 = ?", arrayOf(oldlist[0], oldlist[1], oldlist[2], oldlist[3]))
     }
+    fun setrestLove(restnames: ArrayList<String>) {
+        val wdb = writableDatabase
+        val cv = ContentValues().apply {
+            put(COL11_ISFAVOR, 1)
+        }
+        for (rest_name in restnames)
+            wdb.update(TABLE_NAME, cv, "rest_name = ?", arrayOf(rest_name))
+    }
+    fun getRestData(rest_name: String): ArrayList<Item> {
+        var itemList: ArrayList<Item> = ArrayList()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = ?", arrayOf(rest_name))
+
+        cursor?.run {
+            while (cursor.moveToNext()) {
+                val item = getItem(cursor)
+                itemList.add(item)
+            }
+        }
+        cursor.close()
+        return itemList
+    }
 }
