@@ -35,5 +35,9 @@ class MainActivity : BaseActivity() {
             val intent=Intent(this, CategoryActivity::class.java)
             startActivity(intent)
         }
+        binding.btnSearch.setOnClickListener {
+            val intent=Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
