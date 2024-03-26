@@ -143,6 +143,124 @@ class ItemDB(context: Context):
         return itemList
     }
 
+    // 모든 음식점 list를 가져오는 함수
+    fun getAllRestaurent(): ArrayList<Restaurent> {
+        var restList = ArrayList<Restaurent>()
+        val db = this.readableDatabase
+        val restNameList = ArrayList<String>() // 음식점 이름만 담을 list
+
+        val cursor = db.rawQuery("SELECT DISTINCT $COL2_REST_NAME FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT ''", null)
+        cursor?.let {
+            while (cursor.moveToNext())
+                restNameList.add(cursor.getString(0))
+        }
+        for (rest_name in restNameList) {
+            val restaurent = getRestData(rest_name)
+            val isdilivery = checkDelivery(restaurent)
+            val isvisit = checkVisit(restaurent)
+            val isfavor = checkFavor(restaurent)
+
+            restList.add(Restaurent(
+                rest_name,
+                restaurent[0].rest_star.toFloat(),
+                restaurent[0].rest_comment,
+                restaurent[0].main_image_uri,
+                isdilivery,
+                isvisit,
+                isfavor
+            ))
+        }
+        cursor.close()
+        return restList
+    }
+
+    fun getDiaryList(rest_name: String): ArrayList<Diary> {
+        val db = this.readableDatabase
+        val diaryList = ArrayList<Diary>()
+        val dateList = ArrayList<String>()
+
+        var cursor = db.rawQuery("SELECT DISTINCT $COL5_DATE FROM $TABLE_NAME " +
+                "WHERE $COL2_REST_NAME = ?", arrayOf(rest_name))
+        cursor?.let {
+            while (cursor.moveToNext())
+                dateList.add(cursor.getString(0))
+        }
+        cursor.close()
+        for (date in dateList) {
+            var rest_star = 0.0f
+            var comment = ""
+            var isdelivery = 0
+            var isvisit = 0
+            var menuList = ArrayList<String>()
+            var hashtagList = ArrayList<String>()
+
+            cursor = db.rawQuery(
+                "SELECT * FROM $TABLE_NAME " +
+                        "WHERE $COL2_REST_NAME = ? AND $COL5_DATE = ?", arrayOf(rest_name, date)
+            )
+            while (cursor.moveToNext()) {
+                rest_star = cursor.getFloat(5)
+                comment = cursor.getString(6)
+                isdelivery = cursor.getInt(3)
+                isvisit = cursor.getInt(2)
+                menuList.add(cursor.getString(12))
+            }
+            hashtagList = getRestHash(rest_name)
+            diaryList.add(Diary(
+                date,
+                rest_star,
+                comment,
+                hashtagList,
+                isdelivery,
+                isvisit,
+                menuList
+            ))
+        }
+        return diaryList
+    }
+
+    private fun getRestHash(rest_name: String): ArrayList<String> {
+        var hashList = ArrayList<String>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT DISTINCT $COL17_HASHTAG FROM $TABLE_NAME " +
+                "WHERE $COL2_REST_NAME = ?", arrayOf(rest_name))
+
+        if (cursor.moveToFirst())
+        {
+            val hashtag = cursor.getString(0)
+            hashList = stringToArrayList(hashtag)
+        }
+        return hashList
+    }
+    fun stringToArrayList(input: String): ArrayList<String> {
+        return ArrayList(input.split("\n").filter { it.isNotEmpty() })
+    }
+    private fun checkFavor(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isvisit == 1)
+                return 1
+        }
+        return 0
+    }
+
+    private fun checkVisit(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isvisit == 1)
+                return 1
+        }
+        return 0
+    }
+
+    private fun checkDelivery(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isdelivery == 1)
+                return 1
+        }
+        return 0
+    }
+
+
+
     fun getHashtag(): ArrayList<String> {
         var hashtag = ArrayList<String>()
         val db = this.readableDatabase
@@ -282,7 +400,7 @@ class ItemDB(context: Context):
     }
 
     // 테스트용입니다 00
-    fun getRestHASH(): ArrayList<String> {
+    fun getAllRestHASH(): ArrayList<String> {
         val rest = ArrayList<String>()
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT NULL", null)
@@ -297,7 +415,7 @@ class ItemDB(context: Context):
 
     // 테스트용입니다 00
     fun checkRestaurantExist(rest: String): Boolean {
-        val hashtags = getRestHASH()
+        val hashtags = getAllRestHASH()
         return hashtags.contains(rest)
     }
 
@@ -397,7 +515,8 @@ class ItemDB(context: Context):
     fun getRestData(rest_name: String): ArrayList<Item> {
         var itemList: ArrayList<Item> = ArrayList()
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = ?", arrayOf(rest_name))
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = ? " +
+                "ORDER BY $COL5_DATE DESC", arrayOf(rest_name))
 
         cursor?.run {
             while (cursor.moveToNext()) {
