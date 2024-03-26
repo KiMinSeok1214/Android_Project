@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project_last.databinding.ActivityModifyHashtagBinding
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class ModifyHashtag : BaseActivity() {
     val binding by lazy { ActivityModifyHashtagBinding.inflate(layoutInflater) }
@@ -14,9 +15,24 @@ class ModifyHashtag : BaseActivity() {
     var select_mode:Boolean = false
     var add_mode:Boolean = false
     lateinit var hashtagList: ArrayList<Item>
+    lateinit var slidePanel:SlidingUpPanelLayout
+
+    init {
+        instance = this
+    }
+
+    companion object {
+        private var instance: ModifyHashtag? = null
+
+        fun getInstance(): ModifyHashtag? 		{
+            return instance
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        slidePanel = binding.hashtagMainFrame            // SlidingUpPanel
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         // db로 부터 데이터를 가져온다.
         hashtagList = db.getAllHashtag()
@@ -27,9 +43,18 @@ class ModifyHashtag : BaseActivity() {
         binding.modifyhashtagrecyclerView.adapter = adapter
 
         // 선택 버튼을 눌렀을 때
-        selectMode(hashtagList)
+
+
         delete(hashtagList)
         add()
+    }
+
+    fun showpanel() {
+        val state = slidePanel.panelState
+
+        if (state == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            slidePanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+        }
     }
 
     private fun add() {
@@ -39,7 +64,6 @@ class ModifyHashtag : BaseActivity() {
             {
                 binding.addlayouthashtag.visibility = View.VISIBLE
                 binding.hashAdd.setText("취소")
-                binding.hashSelect.visibility = View.INVISIBLE
                 binding.hashSave.setOnClickListener {
                     try {
                         if (!db.checkHashtagExist(binding.etAddhashtag.text.toString().trim())) {
@@ -55,7 +79,6 @@ class ModifyHashtag : BaseActivity() {
                         binding.hashAdd.setText("추가")
                         binding.hashAdd.visibility = View.VISIBLE
                         binding.addlayouthashtag.visibility = View.INVISIBLE
-                        binding.hashSelect.visibility = View.VISIBLE
                         add_mode = !add_mode
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -65,7 +88,6 @@ class ModifyHashtag : BaseActivity() {
             }
             else {
                 binding.addlayouthashtag.visibility = View.INVISIBLE
-                binding.hashSelect.visibility = View.VISIBLE
                 binding.hashAdd.setText("추가")
                 adapter.notifyDataSetChanged()
             }
@@ -88,27 +110,4 @@ class ModifyHashtag : BaseActivity() {
         }
     }
 
-    private fun selectMode(itemList: ArrayList<Item>) {
-        binding.hashSelect.setOnClickListener {
-            select_mode = !select_mode
-
-            if (select_mode)
-            {
-                adapter.mode = "select"
-                binding.hashDelete.visibility = View.VISIBLE
-                binding.hashAdd.visibility = View.INVISIBLE
-                binding.hashSelect.setText("완료")
-                adapter.notifyDataSetChanged()
-            }
-            else {
-                adapter.mode = "normal"
-                binding.hashDelete.visibility = View.INVISIBLE
-                binding.hashAdd.visibility = View.VISIBLE
-                binding.hashSelect.setText("편집")
-                for (item in itemList)
-                    item.selected = false
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 }

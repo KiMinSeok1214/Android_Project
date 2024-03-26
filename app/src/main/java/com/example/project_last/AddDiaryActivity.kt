@@ -95,7 +95,7 @@ class AddDiaryActivity : BaseActivity() {
             if (state == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                 slidePanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
             }
-            slidePanel.isTouchEnabled = false
+            binding.slideLayout.isClickable = false
         }
     }
 
