@@ -549,30 +549,6 @@ class ItemDB(context: Context):
         cursor.close()
         return itemList
     }
-
-    private fun checkFavor(restaurent: ArrayList<Item>): Int {
-        for (item in restaurent) {
-            if (item.isvisit == 1)
-                return 1
-        }
-        return 0
-    }
-
-    private fun checkVisit(restaurent: ArrayList<Item>): Int {
-        for (item in restaurent) {
-            if (item.isvisit == 1)
-                return 1
-        }
-        return 0
-    }
-
-    private fun checkDelivery(restaurent: ArrayList<Item>): Int {
-        for (item in restaurent) {
-            if (item.isdelivery == 1)
-                return 1
-        }
-        return 0
-    }
     fun getKeywordData(keyword: String): ArrayList<Restaurent> {
         val db = this.readableDatabase
         var restList: ArrayList<Restaurent> = ArrayList()
@@ -621,32 +597,4 @@ class ItemDB(context: Context):
         return restList
     }
 
-    fun getAllRestaurent(): ArrayList<Restaurent> {
-        var restList = ArrayList<Restaurent>()
-        val db = this.readableDatabase
-        val restNameList = ArrayList<String>() // 음식점 이름만 담을 list
-
-        val cursor = db.rawQuery("SELECT DISTINCT $COL2_REST_NAME FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT ''", null)
-        cursor?.let {
-            while (cursor.moveToNext())
-                restNameList.add(cursor.getString(0))
-        }
-        for (rest_name in restNameList) {
-            val restaurent = getRestData(rest_name)
-            val isdilivery = checkDelivery(restaurent)
-            val isvisit = checkVisit(restaurent)
-            val isfavor = checkFavor(restaurent)
-
-            restList.add(Restaurent(
-                rest_name,
-                restaurent[0].rest_star.toFloat(),
-                restaurent[0].rest_comment,
-                restaurent[0].main_image_uri,
-                isdilivery,
-                isvisit,
-                isfavor
-            ))
-        }
-        cursor.close()
-        return restList
-    }}
+}

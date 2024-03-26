@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.ActivitySearchBinding
-import com.example.project_last.databinding.ItemListBinding
 import com.example.project_last.databinding.SearchListBinding
 
 class SearchAdapter(val searchList: ArrayList<String>): RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
