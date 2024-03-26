@@ -48,6 +48,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    implementation("com.github.sparrow007:carouselrecyclerview:1.2.6")
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.2.1")
     implementation("com.airbnb.android:lottie:6.0.0")
 }
