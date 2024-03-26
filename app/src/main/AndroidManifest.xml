@@ -24,12 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".TestHasgtagActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ShowCategoryActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".AddDiaryActivity"
             android:exported="false" />
@@ -40,8 +40,26 @@
             android:name=".BaseActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true"></activity>
-    </application>
+            android:name=".HashtagActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CombineHashtag"
+            android:exported="false" />
+        <activity
+            android:name=".ModifyHashtag"
+            android:exported="false" />
 
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModifyCategory"
+            android:exported="false" />
+        <activity
+            android:name=".TestHashtagActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TestCategoryActivity"
+            android:exported="false" />
+    </application>
 </manifest>

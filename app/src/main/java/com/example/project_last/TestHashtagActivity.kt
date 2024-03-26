@@ -2,10 +2,9 @@ package com.example.project_last
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.project_last.databinding.ActivityTestHasgtagBinding
 
-class TestHasgtagActivity : BaseActivity() {
+class TestHashtagActivity : BaseActivity() {
 
     private val binding: ActivityTestHasgtagBinding by lazy {
         ActivityTestHasgtagBinding.inflate(layoutInflater)

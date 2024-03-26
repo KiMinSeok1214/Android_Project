@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.contentValuesOf
 
@@ -143,6 +144,21 @@ class ItemDB(context: Context):
         return itemList
     }
 
+    fun getAllHashtag(): ArrayList<Item> {
+        var hashtagList: ArrayList<Item> = ArrayList()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = '' AND $COL18_CATEGORY1 = ''", null)
+
+        cursor?.run {
+            while (cursor.moveToNext()) {
+                val hashtag = getItem(cursor)
+                hashtagList.add(hashtag)
+            }
+        }
+        cursor.close()
+        return hashtagList
+    }
+
     fun getHashtag(): ArrayList<String> {
         var hashtag = ArrayList<String>()
         val db = this.readableDatabase
@@ -173,13 +189,9 @@ class ItemDB(context: Context):
         없다면 db에 추가한다.
      */
     fun insertHashtag(hashtag: String) {
-        val db = writableDatabase
-
         if (!checkHashtagExist(hashtag)) {
-            val cv = ContentValues().apply {
-                put(COL17_HASHTAG, hashtag)
-            }
-            db.insert(TABLE_NAME, null, cv)
+            val item = Item(hashtag = hashtag)
+            insertItem(item)
         }
     }
 
@@ -194,9 +206,11 @@ class ItemDB(context: Context):
 
         // 해시태그인 경우
         wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag))
+        Log.d("park", "$hashtag")
 
         // item인 경우
-        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag))
+        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE ?", arrayOf("%$hashtag%"))
+
 
         cursor?.let {
             while (cursor.moveToNext()) {
