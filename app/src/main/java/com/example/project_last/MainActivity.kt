@@ -1,7 +1,6 @@
 package com.example.project_last
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.project_last.databinding.ActivityMainBinding
 
@@ -21,11 +20,19 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
         binding.btnHashtag.setOnClickListener {
-            val intent = Intent(this, TestHasgtagActivity::class.java)
+            val intent = Intent(this, TestHashtagActivity::class.java)
             startActivity(intent)
         }
         binding.btnCategory.setOnClickListener {
-            val intent=Intent(this, ShowCategoryActivity::class.java)
+            val intent=Intent(this, TestCategoryActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnHashtagModify.setOnClickListener {
+            val intent=Intent(this, HashtagActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnCategoryModify.setOnClickListener {
+            val intent=Intent(this, CategoryActivity::class.java)
             startActivity(intent)
         }
     }

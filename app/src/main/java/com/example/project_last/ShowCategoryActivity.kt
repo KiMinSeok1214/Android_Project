@@ -2,10 +2,10 @@ package com.example.project_last
 
 import android.os.Bundle
 import android.util.Log
-import com.example.project_last.databinding.ActivityShowCategoryBinding
+import com.example.project_last.databinding.ActivityTestCategoryBinding
 
-class ShowCategoryActivity:BaseActivity() {
-    val binding by lazy{ ActivityShowCategoryBinding.inflate(layoutInflater)}
+class TestCategoryActivity:BaseActivity() {
+    val binding by lazy{ ActivityTestCategoryBinding.inflate(layoutInflater)}
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)

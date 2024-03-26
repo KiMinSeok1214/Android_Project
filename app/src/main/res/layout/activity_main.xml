@@ -7,6 +7,16 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btn_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="228dp"
+        android:text="test_category"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_showall" />
+
+    <Button
         android:id="@+id/btn_showall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,8 +27,10 @@
         android:text="모든 일기 보기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -38,10 +50,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="122dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="243dp"
         android:text="일기 추가"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -49,19 +62,29 @@
         android:id="@+id/btn_hashtag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="100dp"
         android:text="test_hashtag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_add" />
 
     <Button
-        android:id="@+id/btn_category"
+        android:id="@+id/btn_hashtag_modify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="250dp"
-        android:layout_marginTop="104dp"
-        android:text="test_category"
+        android:layout_marginStart="244dp"
+        android:layout_marginTop="100dp"
+        android:text="modify_hashtag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_showall" />
+
+    <Button
+        android:id="@+id/btn_category_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="388dp"
+        android:text="modify_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_showall" />
 
