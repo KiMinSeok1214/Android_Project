@@ -128,6 +128,7 @@ class ItemDB(context: Context):
         )
         return item
     }
+
     // 모든 list를 가져오는 함수
     fun getAllData(): ArrayList<Item> {
         var itemList: ArrayList<Item> = ArrayList()
@@ -280,8 +281,10 @@ class ItemDB(context: Context):
     fun getHashtag(): ArrayList<String> {
         var hashtag = ArrayList<String>()
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME " +
-                "WHERE $COL2_REST_NAME = '' and $COL18_CATEGORY1 = ''", null)
+        val cursor = db.rawQuery(
+            "SELECT * FROM $TABLE_NAME " +
+                    "WHERE $COL2_REST_NAME = '' and $COL18_CATEGORY1 = ''", null
+        )
 
         cursor?.let {
             while (cursor.moveToNext())
@@ -326,6 +329,12 @@ class ItemDB(context: Context):
         wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag))
 
         // item인 경우
+        /*
+        val cursor = rdb.rawQuery(
+            "SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE '%?%'",
+            arrayOf(hashtag)
+        )
+        */
         val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE ?", arrayOf("%$hashtag%"))
 
 
@@ -413,7 +422,7 @@ class ItemDB(context: Context):
     }
 
     // 테스트용입니다 00
-    fun getAllRestHASH(): ArrayList<String> {
+    fun getRestHASH(): ArrayList<String> {
         val rest = ArrayList<String>()
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT NULL", null)
@@ -428,7 +437,7 @@ class ItemDB(context: Context):
 
     // 테스트용입니다 00
     fun checkRestaurantExist(rest: String): Boolean {
-        val hashtags = getAllRestHASH()
+        val hashtags = getRestHASH()
         return hashtags.contains(rest)
     }
 
@@ -540,4 +549,104 @@ class ItemDB(context: Context):
         cursor.close()
         return itemList
     }
-}
+
+    private fun checkFavor(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isvisit == 1)
+                return 1
+        }
+        return 0
+    }
+
+    private fun checkVisit(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isvisit == 1)
+                return 1
+        }
+        return 0
+    }
+
+    private fun checkDelivery(restaurent: ArrayList<Item>): Int {
+        for (item in restaurent) {
+            if (item.isdelivery == 1)
+                return 1
+        }
+        return 0
+    }
+    fun getKeywordData(keyword: String): ArrayList<Restaurent> {
+        val db = this.readableDatabase
+        var restList: ArrayList<Restaurent> = ArrayList()
+        val restNameList = ArrayList<String>()
+        val cursor = db.rawQuery(
+            "SELECT DISTINCT $COL2_REST_NAME FROM $TABLE_NAME " +
+                    "WHERE $COL2_REST_NAME LIKE '%' || ? || '%' " +
+                    "OR $COL7_REST_COMMENT LIKE '%' || ? || '%' " +
+                    "OR $COL9_ADDRESS LIKE '%' || ? || '%' " +
+                    "OR $COL12_MENU_NAME LIKE '%' || ? || '%' " +
+                    "OR $COL15_MENU_COMMENT LIKE '%' || ? || '%' " +
+                    "OR $COL17_HASHTAG LIKE '%' || ? || '%' " +
+                    "OR $COL18_CATEGORY1 LIKE '%' || ? || '%' " +
+                    "OR $COL19_CATEGORY2 LIKE '%' || ? || '%' " +
+                    "OR $COL20_CATEGORY3 LIKE '%' || ? || '%' " +
+                    "OR $COL21_CATEGORY4 LIKE '%' || ? || '%'",
+            arrayOf(keyword, keyword, keyword, keyword, keyword, keyword, keyword, keyword, keyword, keyword)
+        )
+
+        cursor?.run {
+            while (cursor.moveToNext()) {
+                val restName = cursor.getString(0)
+                // 특정 키워드가 포함된 경우에만 restNameList에 추가
+                if (restName.contains(keyword, ignoreCase = true)) {
+                    restNameList.add(restName)
+                }
+            }
+        }
+        for (rest_name in restNameList) {
+            val restaurent = getRestData(rest_name)
+            val isdilivery = checkDelivery(restaurent)
+            val isvisit = checkVisit(restaurent)
+            val isfavor = checkFavor(restaurent)
+
+            restList.add(Restaurent(
+                rest_name,
+                restaurent[0].rest_star.toFloat(),
+                restaurent[0].rest_comment,
+                restaurent[0].main_image_uri,
+                isdilivery,
+                isvisit,
+                isfavor
+            ))
+        }
+        cursor.close()
+        return restList
+    }
+
+    fun getAllRestaurent(): ArrayList<Restaurent> {
+        var restList = ArrayList<Restaurent>()
+        val db = this.readableDatabase
+        val restNameList = ArrayList<String>() // 음식점 이름만 담을 list
+
+        val cursor = db.rawQuery("SELECT DISTINCT $COL2_REST_NAME FROM $TABLE_NAME WHERE $COL2_REST_NAME IS NOT ''", null)
+        cursor?.let {
+            while (cursor.moveToNext())
+                restNameList.add(cursor.getString(0))
+        }
+        for (rest_name in restNameList) {
+            val restaurent = getRestData(rest_name)
+            val isdilivery = checkDelivery(restaurent)
+            val isvisit = checkVisit(restaurent)
+            val isfavor = checkFavor(restaurent)
+
+            restList.add(Restaurent(
+                rest_name,
+                restaurent[0].rest_star.toFloat(),
+                restaurent[0].rest_comment,
+                restaurent[0].main_image_uri,
+                isdilivery,
+                isvisit,
+                isfavor
+            ))
+        }
+        cursor.close()
+        return restList
+    }}
