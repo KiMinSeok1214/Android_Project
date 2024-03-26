@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/et_menuName"
+        android:id="@+id/tv_menuName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,7 +25,7 @@
         android:layout_marginStart="26dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_menuName"
+        app:layout_constraintTop_toBottomOf="@+id/tv_menuName"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <RatingBar
@@ -49,8 +49,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_ratingbar" />
 
-    <EditText
-        android:id="@+id/et_menuComment"
+    <TextView
+        android:id="@+id/tv_mymenuComment"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -61,8 +61,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_menuComment" />
 
-    <EditText
-        android:id="@+id/et_price"
+    <TextView
+        android:id="@+id/tv_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -71,10 +71,10 @@
         android:gravity="center"
         android:hint="가격을 입력해주세요."
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_menuComment" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_mymenuComment" />
 
-    <Button
-        android:id="@+id/btn_category"
+    <TextView
+        android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"

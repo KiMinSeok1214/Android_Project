@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project_last.databinding.ActivityAddDiaryBinding
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 import java.util.Calendar
 import java.util.Random
@@ -20,12 +21,6 @@ class AddDiaryActivity : BaseActivity() {
     val binding by lazy { ActivityAddDiaryBinding.inflate(layoutInflater) }
     val menuList = ArrayList<Item>()
     lateinit var adapter: MenuAdapter
-    val defaultMenu = Item(
-        rest_name = "",
-        menu_name = "메뉴명을 입력해주세요.",
-        menu_star = 0.0,
-        menu_comment = "메뉴에 대한 코멘트를 작성해주세요.",
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +28,49 @@ class AddDiaryActivity : BaseActivity() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // 저장 버튼을 클릭하면 view에 있는 text들을 저장하고 db에 넣는다.
 
+        val slidePanel = binding.mainFrame                      // SlidingUpPanel
         initActivity()
 
-        binding.ivSave.setOnClickListener {
-            val item = Item(
-                rest_name = binding.etRestName.text.toString().trim(),
-                rest_comment = binding.etRestComment.text.toString().trim(),
-                date = binding.tvDate.text.toString().trim()
-                )
-            db.insertItem(item)
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+        binding.fab.setOnClickListener {
+            // 추가된 Menu 개수만큼 ItemList를 생성해서 db에 저장해야 함
+            // 음식점 이름, 작성일, 음식점 별점, 음식점 코멘트는 고정됨
+
+            // image uri, 카테고리 아직 고려 x
+            val rest_name = binding.etRestName.text.toString().trim()
+            val date = binding.tvDate.text.trim()
+            val rest_star = binding.ratingBar.rating
+            val rest_comment = binding.etRestComment.text.toString().trim()
+            val menu_name = binding.etMenuName.text.toString().trim()
+            val menu_star = binding.menuRatingbar.rating
+            val menu_comment = binding.etMenuComment.text.toString().trim()
+            val price = if (binding.etPrice.text.toString() != "") {
+                binding.etPrice.text.toString().toInt()
+            } else { 0 }
+
+            menuList.add(Item(
+                rest_name = rest_name,
+                date = date.toString(),
+                rest_star = rest_star.toDouble(),
+                rest_comment = rest_comment,
+                menu_name = menu_name,
+                menu_star = menu_star.toDouble(),
+                menu_comment = menu_comment,
+                price = price
+            ))
+            ClearAddMenu()
+            adapter.notifyDataSetChanged()
+            slidePanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        }
+
+        binding.ivDiarysave.setOnClickListener {
+            if (!binding.etRestName.text.isEmpty()) {
+                for (menu in menuList)
+                    db.insertItem(menu)
+            }
+            else {
+                Toast.makeText(this, "음식점 이름을 입력하세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
 
         binding.tvDate.setOnClickListener {
@@ -62,9 +90,20 @@ class AddDiaryActivity : BaseActivity() {
             star_late = rating
         }
         binding.tvAddMenu.setOnClickListener {
-            menuList.add(0, defaultMenu)
-            adapter.notifyDataSetChanged()
+            val state = slidePanel.panelState
+
+            if (state == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                slidePanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+            }
+            binding.slideLayout.isClickable = false
         }
+    }
+
+    private fun ClearAddMenu() {
+        binding.etMenuName.setText("")
+        binding.menuRatingbar.rating = 0.0f
+        binding.etMenuComment.setText("")
+        binding.etPrice.setText("")
     }
 
     private fun initActivity() {
@@ -76,7 +115,6 @@ class AddDiaryActivity : BaseActivity() {
         binding.tvDate.text = "$year / ${month + 1} / $day"
 
         // menu list Recycler view adapter 연결
-        menuList.add(defaultMenu)
         adapter = MenuAdapter(menuList)
         binding.menuList.layoutManager = LinearLayoutManager(this)
         binding.menuList.adapter = adapter
@@ -90,4 +128,5 @@ class AddDiaryActivity : BaseActivity() {
             }
         }
     }
+
 }
