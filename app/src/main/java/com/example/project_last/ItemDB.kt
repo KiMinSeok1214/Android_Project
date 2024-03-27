@@ -572,9 +572,7 @@ class ItemDB(context: Context):
             while (cursor.moveToNext()) {
                 val restName = cursor.getString(0)
                 // 특정 키워드가 포함된 경우에만 restNameList에 추가
-                if (restName.contains(keyword, ignoreCase = true)) {
-                    restNameList.add(restName)
-                }
+                restNameList.add(restName)
             }
         }
         for (rest_name in restNameList) {

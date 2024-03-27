@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-        binding.ivSearch.setOnClickListener {
+        binding.ivSearch2.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -79,6 +79,11 @@ class HomeAdapter(val restList:ArrayList<Restaurent>) : RecyclerView.Adapter<Hom
         binding.tvHomecomment.text = restList[position].comment
         binding.tvHomeRestname.text = restList[position].rest_name
         // image는 나중에 고려
+        binding.homelayout.setOnClickListener {
+            val intent = Intent(binding.root.context, ShowRestActivity::class.java)
+            intent.putExtra("rest_name", restList[position].rest_name)
+            binding.root.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = restList.size

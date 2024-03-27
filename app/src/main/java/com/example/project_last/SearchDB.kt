@@ -5,15 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.widget.Toast
-import androidx.core.content.contentValuesOf
-import com.example.project_last.ItemDB.Companion.COL11_ISFAVOR
-import com.example.project_last.ItemDB.Companion.COL17_HASHTAG
-import com.example.project_last.ItemDB.Companion.COL18_CATEGORY1
-import com.example.project_last.ItemDB.Companion.COL19_CATEGORY2
-import com.example.project_last.ItemDB.Companion.COL20_CATEGORY3
-import com.example.project_last.ItemDB.Companion.COL21_CATEGORY4
-import com.example.project_last.ItemDB.Companion.COL2_REST_NAME
 
 class SearchDB(context: Context):
 
@@ -69,10 +60,9 @@ class SearchDB(context: Context):
         cursor?.close()
         return keywordList
     }
-    fun deleteItem(keywordList: ArrayList<String>) {
-        val db = writableDatabase
+    fun deleteItem(keyword: String){
+        val db = this.writableDatabase
 
-        for (keyword in keywordList)
-            db.delete(TABLE_NAME, "$COL1_KEYWORD = ?", arrayOf(keyword))
+        db.delete(TABLE_NAME, "$COL1_KEYWORD = ?", arrayOf(keyword))
     }
-    }
+}
