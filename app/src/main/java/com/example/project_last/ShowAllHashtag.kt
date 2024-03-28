@@ -27,6 +27,7 @@ class ShowAllHashtag : BaseActivity() {
     private val binding by lazy { ActivityShowallHashtagBinding.inflate(layoutInflater) }
     private lateinit var adapter: HashtagShowAllAdapter
     private lateinit var hashtagList: ArrayList<Item>
+    var mode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +58,39 @@ class ShowAllHashtag : BaseActivity() {
             binding2.tvHashtagname.text = "#" + hashtagList[position].hashtag
 
             binding2.tvHashtagname.setOnClickListener {
+                if (mode == 0) {
+                    hashtagList[position].selected = true
+                    binding.hashApply.visibility = View.VISIBLE
+                    mode = 1
+                }
+                else {
+                    hashtagList[position].selected = false
+                    binding.hashApply.visibility = View.INVISIBLE
+                    mode = 0
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            binding.hashApply.setOnClickListener {
+                hashtagList[position].selected = false
+                binding.hashApply.visibility = View.INVISIBLE
+                mode = 0
+                adapter.notifyDataSetChanged()
                 val intent = Intent(binding.root.context, ShowAllActivity::class.java)
                 intent.putExtra("KEYWORD", hashtagList[position].hashtag)
                 intent.putExtra("PREACTIVITY", "hashtag")
                 startActivity(intent)
             }
+
+            if (hashtagList[position].selected == true) {
+                binding2.tvHashtagname.setBackgroundResource(R.drawable.box_hashtagpos1)
+            }
+            else {
+                binding2.tvHashtagname.setBackgroundResource(R.drawable.box_hashtag)
+            }
         }
+
+
 
         override fun getItemCount(): Int = hashtagList.size
     }
