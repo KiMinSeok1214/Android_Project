@@ -250,6 +250,9 @@ class ItemDB(context: Context):
         }
         return hashList
     }
+    fun stringToArrayList(input: String): ArrayList<String> {
+        return ArrayList(input.split("\n").filter { it.isNotEmpty() })
+    }
     private fun checkFavor(restaurent: ArrayList<Item>): Int {
         for (item in restaurent) {
             if (item.isvisit == 1)
@@ -279,8 +282,10 @@ class ItemDB(context: Context):
     fun getHashtag(): ArrayList<String> {
         var hashtag = ArrayList<String>()
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME " +
-                "WHERE $COL2_REST_NAME = '' and $COL18_CATEGORY1 = ''", null)
+        val cursor = db.rawQuery(
+            "SELECT * FROM $TABLE_NAME " +
+                    "WHERE $COL2_REST_NAME = '' and $COL18_CATEGORY1 = ''", null
+        )
 
         cursor?.let {
             while (cursor.moveToNext())
@@ -289,7 +294,7 @@ class ItemDB(context: Context):
         return hashtag
     }
 
-    fun deleteItem(restList: ArrayList<String>) {
+    fun deleteRest(restList: ArrayList<String>) {
         val db = writableDatabase
 
         for (rest in restList)
@@ -312,10 +317,11 @@ class ItemDB(context: Context):
         }
     }
 
-    fun stringToArrayList(input: String): ArrayList<String> {
-        return ArrayList(input.split("\n").filter { it.isNotEmpty() })
-    }
-
+    /*
+        item인 경우
+            해시태그 존재 : 업데이트
+        해시태그인 경우 : 삭제
+     */
     fun deleteHashtag(hashtag: String) {
         val wdb = writableDatabase
         val rdb = readableDatabase
@@ -584,4 +590,17 @@ class ItemDB(context: Context):
         return restList
     }
 
+    fun loveRest(rest: String, setting: Int) {
+        val db = writableDatabase
+        val cv = ContentValues().apply {
+            put(COL11_ISFAVOR, setting)
+        }
+        db.update(TABLE_NAME, cv, "$COL2_REST_NAME = ?", arrayOf(rest))
+    }
+
+    fun deleteDiary(rest_name: String, date: String) {
+        val db = writableDatabase
+
+        db.delete(TABLE_NAME, "rest_name = ? and date = ?", arrayOf(rest_name, date))
+    }
 }

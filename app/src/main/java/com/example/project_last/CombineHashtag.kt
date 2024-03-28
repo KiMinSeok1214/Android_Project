@@ -25,7 +25,6 @@ class CombineHashtag : BaseActivity() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         // db로 부터 데이터를 가져온다.
         hashtagList = db.getAllHashtag()
-        Log.d("parklog", "${hashtagList[0]}")
         // 데이터를 recycler view에 뿌린다.
         val listAdapter = HashtagCombineAdapter(hashtagList)
         adapter = listAdapter
@@ -64,7 +63,7 @@ class CombineHashtag : BaseActivity() {
                     }
                 }
             }
-            if (mode == 2) {
+            if (mode != 0) {
                 binding.hashReset.setOnClickListener {
                     selectpos1 = null
                     selectpos2 = null

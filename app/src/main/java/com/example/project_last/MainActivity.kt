@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat.setAlpha
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.ActivityMainBinding
@@ -13,7 +13,9 @@ import com.example.project_last.databinding.MenuListBinding
 
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    lateinit var adapter: HomeAdapter
+    companion object {
+        lateinit var adapter: HomeAdapter
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,7 @@ class MainActivity : BaseActivity() {
         binding.carouselRecyclerview.adapter = adapter
         binding.carouselRecyclerview.apply {
             set3DItem(true)
+            setAlpha(true)
         }
     }
 
@@ -44,10 +47,17 @@ class MainActivity : BaseActivity() {
         //모든 일기보기
         binding.tvShowall.setOnClickListener {
             val intent = Intent(this, ShowAllActivity::class.java)
+            intent.putExtra("PREACTIVITY", "home")
             startActivity(intent)
         }
         binding.ivShowAll.setOnClickListener {
             val intent = Intent(this, ShowAllActivity::class.java)
+            intent.putExtra("PREACTIVITY", "home")
+            startActivity(intent)
+        }
+        binding.fabAdd.setOnClickListener {
+            val intent = Intent(this, AddDiaryActivity::class.java)
+            intent.putExtra("PREACTIVITY", "home")
             startActivity(intent)
         }
         // 카테고리 설정

@@ -50,7 +50,7 @@
             app:srcCompat="@drawable/filter" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/iv_showallSearch"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
@@ -75,7 +75,7 @@
             android:text="배달 + 방문" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/iv_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
@@ -84,6 +84,16 @@
             app:srcCompat="@drawable/mark" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="삭제"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -151,7 +151,6 @@ class ModifyHashtag : BaseActivity() {
 
         }
     }
-
     inner class HashtagModifyViewHolder(val binding: HashtagModifyListBinding): RecyclerView.ViewHolder(binding.root) {}
     inner class HashtagModifyAdapter(private val hashtagList: ArrayList<Item>) : RecyclerView.Adapter<HashtagModifyViewHolder>() {
 

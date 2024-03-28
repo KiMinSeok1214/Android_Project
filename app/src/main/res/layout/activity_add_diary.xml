@@ -34,12 +34,12 @@
                 style="@android:style/Widget.DeviceDefault.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:numStars="5"
                 android:isIndicator="false"
+                android:numStars="5"
                 android:rating="0"
                 android:stepSize="0.5"
-                app:layout_constraintEnd_toStartOf="@+id/tv_extraInfo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_restName" />
 
             <ImageView
@@ -71,7 +71,7 @@
                 android:id="@+id/tv_extraInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="26dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="추가정보"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -81,9 +81,9 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginBottom="5dp"
-                android:text= "날짜를 입력해주세요."
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="날짜를 입력해주세요."
                 android:textSize="10sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -110,13 +110,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/extraLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:backgroundTint="#ccc"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,27 +126,67 @@
                 app:strokeColor="#aaa"
                 app:strokeWidth="1dp">
 
-                <TextView
+                <Button
+                    android:id="@+id/btn_delivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="10dp"
-                    android:text="The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."
-                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="84dp"
+                    android:text="배달"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </com.google.android.material.card.MaterialCardView>
+
+                <Button
+                    android:id="@+id/btn_visit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="84dp"
+                    android:text="방문"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:drawableLeft="@android:drawable/ic_menu_mapmode"
+                    android:drawableTint="#000000"
+                    android:text="주소를 등록하세요."
+                    android:textAlignment="center"
+                    app:borderWidth="3dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_delivery"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mid_constraintlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
                 <TextView
                     android:id="@+id/tv_commentTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="음식점 코멘트"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -153,7 +195,7 @@
                     android:id="@+id/et_rest_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/box_border"
                     android:gravity="center"
@@ -334,7 +376,7 @@
             android:layout_marginBottom="8dp"
             android:src="@android:drawable/ic_menu_send"
             app:fabSize="normal"
-            android:background="#EBE8F1"
+            android:backgroundTint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

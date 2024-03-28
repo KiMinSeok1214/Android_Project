@@ -8,7 +8,9 @@ data class Restaurent(
     var isdelivery: Int,
     var isvisit: Int,
     var isfavor: Int
-)
+) {
+    var selected: Boolean = false
+}
 
 data class Diary(
     var date:String,

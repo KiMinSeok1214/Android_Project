@@ -1,6 +1,7 @@
 package com.example.project_last
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,11 +16,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import java.util.Calendar
 import java.util.Random
 
-
+// 별점 입력이 안 됨.
+// 카테고리 이미지 아직 안됨
 class AddDiaryActivity : BaseActivity() {
     var star_late:Float = 0.0F
     val binding by lazy { ActivityAddDiaryBinding.inflate(layoutInflater) }
     val menuList = ArrayList<Item>()
+    var preactivity: String? = null
     lateinit var adapter: MenuAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,12 @@ class AddDiaryActivity : BaseActivity() {
 
         val slidePanel = binding.mainFrame                      // SlidingUpPanel
         initActivity()
+
+
+        val rest_name = intent.getStringExtra("rest_name")
+        rest_name?.let {
+            binding.etRestName.setText(rest_name)
+        }
 
         binding.fab.setOnClickListener {
             // 추가된 Menu 개수만큼 ItemList를 생성해서 db에 저장해야 함
@@ -63,9 +72,21 @@ class AddDiaryActivity : BaseActivity() {
         }
 
         binding.ivDiarysave.setOnClickListener {
-            if (!binding.etRestName.text.isEmpty()) {
+            if (binding.etRestName.text.isNotEmpty()) {
                 for (menu in menuList)
                     db.insertItem(menu)
+                if (preactivity == "home") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    // stack 제거 후 호출
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    finish()
+                }
+                else {
+                    onBackPressed()
+                    ShowRestActivity.diaryadapter.notifyDataSetChanged()
+                    finish()
+                }
             }
             else {
                 Toast.makeText(this, "음식점 이름을 입력하세요.", Toast.LENGTH_SHORT)
@@ -107,6 +128,7 @@ class AddDiaryActivity : BaseActivity() {
     }
 
     private fun initActivity() {
+        preactivity = intent.getStringExtra("PREACTIVITY")
         // 처음 추가했을 경우
         val mcurrentTime = Calendar.getInstance()
         val year = mcurrentTime.get(Calendar.YEAR)
@@ -118,6 +140,7 @@ class AddDiaryActivity : BaseActivity() {
         adapter = MenuAdapter(menuList)
         binding.menuList.layoutManager = LinearLayoutManager(this)
         binding.menuList.adapter = adapter
+
 
         binding.tvExtraInfo.setOnClickListener {
             if (binding.extraLayout.visibility == View.GONE) {
