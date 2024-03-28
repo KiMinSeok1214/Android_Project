@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.contentValuesOf
+import java.util.ArrayList
 
 class ItemDB(context: Context):
 
@@ -248,9 +249,6 @@ class ItemDB(context: Context):
         }
         return hashList
     }
-    fun stringToArrayList(input: String): ArrayList<String> {
-        return ArrayList(input.split("\n").filter { it.isNotEmpty() })
-    }
     private fun checkFavor(restaurent: ArrayList<Item>): Int {
         for (item in restaurent) {
             if (item.isvisit == 1)
@@ -290,22 +288,13 @@ class ItemDB(context: Context):
         return hashtag
     }
 
-    fun deleteItem(restList: ArrayList<String>) {
-        val db = writableDatabase
 
-        for (rest in restList)
-            db.delete(TABLE_NAME, "rest_name = ?", arrayOf(rest))
-    }
 
     fun checkHashtagExist(nowHashtag: String): Boolean {
         val hashtags = getHashtag()
         return hashtags.contains(nowHashtag)
     }
 
-    /*
-        hashtag를 하나 받아서 있는지 없는지 확인하고,
-        없다면 db에 추가한다.
-     */
     fun insertHashtag(hashtag: String) {
         if (!checkHashtagExist(hashtag)) {
             val item = Item(hashtag = hashtag)
@@ -313,11 +302,10 @@ class ItemDB(context: Context):
         }
     }
 
-    /*
-        item인 경우
-            해시태그 존재 : 업데이트
-        해시태그인 경우 : 삭제
-     */
+    fun stringToArrayList(input: String): ArrayList<String> {
+        return ArrayList(input.split("\n").filter { it.isNotEmpty() })
+    }
+
     fun deleteHashtag(hashtag: String) {
         val wdb = writableDatabase
         val rdb = readableDatabase
@@ -326,18 +314,19 @@ class ItemDB(context: Context):
         wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag))
 
         // item인 경우
-        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL17_HASHTAG LIKE ?", arrayOf("%$hashtag%"))
+        val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME != '' AND $COL17_HASHTAG LIKE ?", arrayOf("%$hashtag%"))
 
 
         cursor?.let {
             while (cursor.moveToNext()) {
                 var oldstr = cursor.getString(16)
-                val newstr = oldstr.replace(hashtag, "")
+                var list = stringToArrayList(cursor.getString(16))
+                list.remove("$hashtag")
+                val newstr = list.joinToString("\n")
                 val cv = ContentValues().apply {
                     put(COL17_HASHTAG, newstr)
                 }
-                wdb.update(TABLE_NAME, cv, "$COL17_HASHTAG = ?",
-                    arrayOf(oldstr))
+                wdb.update(TABLE_NAME, cv, "$COL17_HASHTAG = ?", arrayOf(oldstr))
             }
         }
         cursor.close()
@@ -356,21 +345,18 @@ class ItemDB(context: Context):
 
             // item인 경우
             val cursor = rdb.rawQuery(
-                "SELECT * FROM $TABLE_NAME " +
-                        "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag)
+                "SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME != '' AND $COL18_CATEGORY1 != '' AND $COL17_HASHTAG LIKE ?", arrayOf("%$hashtag%")
             )
 
             cursor?.let {
                 while (cursor.moveToNext()) {
                     var oldstr = cursor.getString(16)
-                    val newstr = oldstr.replace(hashtag, newhashtag)
-                    val cv = ContentValues().apply {
-                        put(COL17_HASHTAG, newstr)
-                    }
-                    wdb.update(
-                        TABLE_NAME, cv, "$COL17_HASHTAG = ?",
-                        arrayOf(oldstr)
-                    )
+                    var list = stringToArrayList(cursor.getString(16))
+                    list.remove(hashtag)
+                    list.add(newhashtag)
+                    val newstr = list.joinToString("\n")
+                    val cv = ContentValues().apply { put(COL17_HASHTAG, newstr) }
+                    wdb.update(TABLE_NAME, cv, "$COL17_HASHTAG = ?", arrayOf(oldstr))
                 }
             }
             cursor.close()
@@ -383,17 +369,21 @@ class ItemDB(context: Context):
         val rdb = readableDatabase
 
         // 해시태그인 경우 삭제
+        Log.d("h1", "combineH1ToH2: brfore")
         wdb.delete(TABLE_NAME, "hashtag = ?", arrayOf(hashtag1))
-
+        Log.d("h1", "combineH1ToH2: after")
         // item인 경우 h1 -> h2로 rename
         val cursor = rdb.rawQuery(
-            "SELECT * FROM $TABLE_NAME " +
-                    "WHERE $COL17_HASHTAG LIKE '%?%'", arrayOf(hashtag1)
+            "SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME != '' AND $COL18_CATEGORY1 != '' AND $COL17_HASHTAG LIKE ?", arrayOf("%${hashtag1}%")
         )
         cursor?.let {
             while (cursor.moveToNext()) {
                 var oldstr = cursor.getString(16)
-                val newstr = oldstr.replace(hashtag1, hashtag2)
+                var list = stringToArrayList(cursor.getString(16))
+
+                list.remove(hashtag1)
+                list.add(hashtag2)
+                val newstr = list.joinToString("\n")
                 val cv = ContentValues().apply {
                     put(COL17_HASHTAG, newstr)
                 }

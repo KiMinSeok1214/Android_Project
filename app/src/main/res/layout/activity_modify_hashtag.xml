@@ -12,8 +12,7 @@
     app:umanoPanelHeight="0dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ShowAllActivity">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView"
@@ -40,27 +39,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:id="@+id/addlayouthashtag"
             android:layout_width="409dp"
             android:layout_height="62dp"
             android:layout_marginTop="1dp"
-            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/modifyhashtagrecyclerView">
 
             <LinearLayout
-                android:id="@+id/edit_layout"
+                android:id="@+id/addhash_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:orientation="horizontal"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tv_addhash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -69,7 +69,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/et_addhashtag"
+                    android:id="@+id/et_addhash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
@@ -77,7 +77,7 @@
                     android:inputType="text" />
 
                 <Button
-                    android:id="@+id/hash_save"
+                    android:id="@+id/btn_hash_save"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,7 +86,44 @@
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/renamehash_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/et_renamehash"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:hint="hashtag"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/btn_hash_rename"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="변경"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="취소"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/hash_add"

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.DiaryListBinding
 import com.example.project_last.databinding.MenuListBinding
+import java.util.ArrayList
 
 class DiaryAdapter(val diaryList: ArrayList<Diary>): RecyclerView.Adapter<DiaryAdapter.RestViewHolder>() {
     inner class RestViewHolder(val binding: DiaryListBinding): RecyclerView.ViewHolder(binding.root) {

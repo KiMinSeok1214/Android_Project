@@ -1,52 +1,51 @@
 package com.example.project_last
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.ActivityModifyHashtagBinding
+import com.example.project_last.databinding.HashtagModifyListBinding
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import java.util.ArrayList
 
 class ModifyHashtag : BaseActivity() {
-    val binding by lazy { ActivityModifyHashtagBinding.inflate(layoutInflater) }
-    lateinit var adapter: HashtagModifyAdapter
-    var select_mode:Boolean = false
-    var add_mode:Boolean = false
-    lateinit var hashtagList: ArrayList<Item>
-    lateinit var slidePanel:SlidingUpPanelLayout
+    private val binding by lazy { ActivityModifyHashtagBinding.inflate(layoutInflater) }
+    private lateinit var adapter: HashtagModifyAdapter
+    private var add_mode:Boolean = false
+    private lateinit var hashtagList: ArrayList<Item>
+    private lateinit var slidePanel:SlidingUpPanelLayout
+    var selectpos:Int? = null
 
-    init {
-        instance = this
-    }
-
-    companion object {
-        private var instance: ModifyHashtag? = null
-
-        fun getInstance(): ModifyHashtag? 		{
-            return instance
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        slidePanel = binding.hashtagMainFrame            // SlidingUpPanel
+        slidePanel = binding.hashtagMainFrame // SlidingUpPanel
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
         // db로 부터 데이터를 가져온다.
         hashtagList = db.getAllHashtag()
+
         // 데이터를 recycler view에 뿌린다.
-        val listAdapter = HashtagModifyAdapter(hashtagList)
-        adapter = listAdapter
+        adapter = HashtagModifyAdapter(hashtagList)
         binding.modifyhashtagrecyclerView.layoutManager = LinearLayoutManager(this)
         binding.modifyhashtagrecyclerView.adapter = adapter
 
-        // 선택 버튼을 눌렀을 때
-
-
-        delete(hashtagList)
-        add()
+        delete()
+        addmode()
+        addmodetoggle()
+        renamemode()
+        rename()
     }
 
     fun showpanel() {
@@ -57,57 +56,120 @@ class ModifyHashtag : BaseActivity() {
         }
     }
 
-    private fun add() {
+    private fun addmodetoggle() {
         binding.hashAdd.setOnClickListener {
             add_mode = !add_mode
-            if (add_mode)
-            {
-                binding.addlayouthashtag.visibility = View.VISIBLE
+            if (add_mode) {
+                binding.renamehashLayout.visibility = View.INVISIBLE
+                binding.addhashLayout.visibility = View.VISIBLE
                 binding.hashAdd.setText("취소")
-                binding.hashSave.setOnClickListener {
-                    try {
-                        if (!db.checkHashtagExist(binding.etAddhashtag.text.toString().trim())) {
-                            hashtagList.add(Item(hashtag = binding.etAddhashtag.text.toString().trim()))
-                            db.insertHashtag(
-                                binding.etAddhashtag.text.toString().trim()
-                            )
-                        }
-                        else {
-                            Toast.makeText(this, "존재하는 해시태그입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        binding.etAddhashtag.setText("")
-                        binding.hashAdd.setText("추가")
-                        binding.hashAdd.visibility = View.VISIBLE
-                        binding.addlayouthashtag.visibility = View.INVISIBLE
-                        add_mode = !add_mode
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    adapter.notifyDataSetChanged()
-                }
             }
             else {
-                binding.addlayouthashtag.visibility = View.INVISIBLE
+                binding.renamehashLayout.visibility = View.INVISIBLE
+                binding.addhashLayout.visibility = View.INVISIBLE
                 binding.hashAdd.setText("추가")
-                adapter.notifyDataSetChanged()
             }
         }
     }
-    private fun delete(itemList: ArrayList<Item>) {
-        // recycler view 와 db에서 모두 제거
-        binding.hashDelete.setOnClickListener {
-            var hashtagList = ArrayList<String>()
-            for ((idx, item) in itemList.withIndex().reversed()) {
-                if (item.selected)
-                {
-                    itemList.removeAt(idx)
-                    db.deleteHashtag(item.hashtag)
-                }
-            }
-            // db에 제거할 restname 전달
 
+    private fun addmode() {
+        binding.btnHashSave.setOnClickListener {
+            try {
+                val newHashtag = binding.etAddhash.text.toString().trim()
+                if (newHashtag.isNotEmpty() && !db.checkHashtagExist(newHashtag)) {
+                    hashtagList.add(Item(hashtag = newHashtag))
+                    db.insertHashtag(newHashtag)
+                    binding.etAddhash.setText("")
+                    add_mode = false
+                    binding.addhashLayout.visibility = View.INVISIBLE
+                    binding.hashAdd.setText("추가")
+                    adapter.notifyDataSetChanged()
+                }
+                else {
+                    Toast.makeText(this, "존재하는 해시태그입니다.", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun delete() {
+        // recycler view 와 db에서 모두 제거
+        binding.tvDelete.setOnClickListener {
+            db.deleteHashtag(hashtagList[selectpos!!].hashtag)
+            hashtagList.removeAt(selectpos!!)
+            selectpos = null
+            slidePanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            binding.renamehashLayout.visibility = View.INVISIBLE
+            binding.hashAdd.visibility = View.VISIBLE
             adapter.notifyDataSetChanged()
         }
     }
 
+    private fun renamemode() {
+        binding.tvEdit.setOnClickListener {
+            binding.etRenamehash.setText(hashtagList[selectpos!!].hashtag)
+            binding.renamehashLayout.visibility = View.VISIBLE
+            binding.hashAdd.visibility = View.INVISIBLE
+            binding.addhashLayout.visibility = View.INVISIBLE
+            slidePanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        }
+        binding.btnBack.setOnClickListener {
+            binding.renamehashLayout.visibility = View.INVISIBLE
+            binding.hashAdd.visibility = View.VISIBLE
+            binding.addhashLayout.visibility = View.INVISIBLE
+            selectpos = null
+        }
+    }
+
+    private fun rename() {
+        binding.btnHashRename.setOnClickListener {
+            try {
+                val newHashtag = binding.etRenamehash.text.toString().trim()
+                if (newHashtag.isNotEmpty() && !db.checkHashtagExist(newHashtag)) {
+                    db.renameHashtag(hashtagList[selectpos!!].hashtag, newHashtag)
+                    hashtagList[selectpos!!].hashtag = newHashtag
+                    binding.etRenamehash.setText("")
+                    selectpos = null
+                    add_mode = false
+                    binding.hashAdd.setText("추가")
+                    binding.etAddhash.setText("")
+                    binding.renamehashLayout.visibility = View.INVISIBLE
+                    binding.addhashLayout.visibility = View.INVISIBLE
+                    binding.hashAdd.visibility = View.VISIBLE
+                    adapter.notifyDataSetChanged()
+                }
+                else {
+                    Toast.makeText(this, "존재하는 해시태그입니다. 다시 입력하세요.", Toast.LENGTH_SHORT).show()
+                    binding.etRenamehash.setText(hashtagList[selectpos!!].hashtag)
+                }
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    inner class HashtagModifyViewHolder(val binding: HashtagModifyListBinding): RecyclerView.ViewHolder(binding.root) {}
+    inner class HashtagModifyAdapter(private val hashtagList: ArrayList<Item>) : RecyclerView.Adapter<HashtagModifyViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashtagModifyViewHolder {
+            val binding = HashtagModifyListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return HashtagModifyViewHolder(binding)
+        }
+
+
+        override fun onBindViewHolder(holder: HashtagModifyViewHolder, position: Int) {
+            val binding = holder.binding
+            binding.tvHashtagname.text = "#" + hashtagList[position].hashtag
+
+            binding.ivMore.setOnClickListener {
+                selectpos = position
+                showpanel()
+            }
+        }
+        override fun getItemCount(): Int = hashtagList.size
+    }
 }
