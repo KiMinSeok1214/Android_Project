@@ -22,9 +22,12 @@ class ShowAllActivity : BaseActivity() {
         initActivity()
         // db로 부터 데이터를 가져온다.
         val keyword = intent.getStringExtra("KEYWORD") ?: ""
-        if (keyword.isNotEmpty())
+        val preactivity = intent.getStringExtra("PREACTIVITY") ?: ""
+        if (preactivity == "search")
             restList = db.getKeywordData(keyword)
-        else
+        else if (preactivity == "hashtag")
+            restList = db.getHASHREST(keyword)
+        else if (preactivity == "home")
             restList = db.getAllRestaurent()
 
         // 데이터를 recycler view에 뿌린다.

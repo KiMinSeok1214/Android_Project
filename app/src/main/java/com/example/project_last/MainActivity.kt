@@ -68,6 +68,11 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, HashtagActivity::class.java)
             startActivity(intent)
         }
+
+        binding.showAllHash.setOnClickListener {
+            val intent = Intent(this, ShowAllHashtag::class.java)
+            startActivity(intent)
+        }
     }
 }
 
