@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_last"
         tools:targetApi="31">
+        <activity android:name=".MmainActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".ShowRestActivity"
             android:exported="false" />
@@ -25,8 +28,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SearchActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
+            android:theme="@style/noaction"
             android:exported="true">
         </activity>
 
