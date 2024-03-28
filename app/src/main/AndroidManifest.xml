@@ -55,6 +55,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".ShowAllHashtag"
+            android:exported="false" />
+
+        <activity
             android:name=".CategoryActivity"
             android:exported="false" />
         <activity
@@ -66,5 +70,7 @@
         <activity
             android:name=".TestCategoryActivity"
             android:exported="false" />
+
+
     </application>
 </manifest>

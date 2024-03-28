@@ -417,6 +417,41 @@ class ItemDB(context: Context):
         insertItem(item)
     }
 
+    fun getHASHREST(hashtag : String): ArrayList<Restaurent> {
+        val restNameList = ArrayList<String>()
+        var restList: ArrayList<Restaurent> = ArrayList()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME != ''", null)
+
+        cursor?.let {
+            while (cursor.moveToNext()) {
+                var list = stringToArrayList(cursor.getString(16))
+                if (list.contains(hashtag))
+                    restNameList.add(cursor.getString(1))
+            }
+        }
+
+        for (rest_name in restNameList) {
+            val restaurent = getRestData(rest_name)
+            val isdilivery = checkDelivery(restaurent)
+            val isvisit = checkVisit(restaurent)
+            val isfavor = checkFavor(restaurent)
+
+            restList.add(Restaurent(
+                rest_name,
+                restaurent[0].rest_star.toFloat(),
+                restaurent[0].rest_comment,
+                restaurent[0].main_image_uri,
+                isdilivery,
+                isvisit,
+                isfavor
+            ))
+        }
+        return restList
+    }
+
+
+
     // 테스트용입니다 00
     fun getRestHASH(): ArrayList<String> {
         val rest = ArrayList<String>()
@@ -548,6 +583,7 @@ class ItemDB(context: Context):
         val db = this.readableDatabase
         var restList: ArrayList<Restaurent> = ArrayList()
         val restNameList = ArrayList<String>()
+
         val cursor = db.rawQuery(
             "SELECT DISTINCT $COL2_REST_NAME FROM $TABLE_NAME " +
                     "WHERE $COL2_REST_NAME LIKE '%' || ? || '%' " +
