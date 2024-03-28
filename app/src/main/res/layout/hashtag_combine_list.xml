@@ -6,6 +6,7 @@
     android:id="@+id/hashtag_layout"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
+    android:layout_marginLeft="24dp"
     android:layout_marginTop="8dp"
     >
 
@@ -13,17 +14,19 @@
         android:id="@+id/tv_hashtagname"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="#"
         android:background="@drawable/box_hashtag"
+        android:gravity="center"
+        android:padding="7dp"
+        android:text="#"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:padding="7dp"
-        android:gravity="center"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

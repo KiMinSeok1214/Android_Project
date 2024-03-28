@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat.setAlpha
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_last.databinding.ActivityMainBinding
@@ -27,7 +28,6 @@ class MainActivity : BaseActivity() {
         binding.carouselRecyclerview.adapter = adapter
         binding.carouselRecyclerview.apply {
             set3DItem(true)
-            setAlpha(true)
         }
     }
 
@@ -64,7 +64,10 @@ class MainActivity : BaseActivity() {
         binding.ivFilter.setOnClickListener {
 
         }
-
+        binding.setHash.setOnClickListener {
+            val intent = Intent(this, HashtagActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
 

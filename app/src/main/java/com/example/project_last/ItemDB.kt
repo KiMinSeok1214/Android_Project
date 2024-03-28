@@ -439,8 +439,7 @@ class ItemDB(context: Context):
             val rdb = readableDatabase
 
             // item인 경우
-            val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME " +
-                    "WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG NOT LIKE '%?%'", arrayOf(restaurant, hashtag))
+            val cursor = rdb.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL2_REST_NAME = ? and $COL17_HASHTAG NOT LIKE '%?%'", arrayOf(restaurant, hashtag))
 
             cursor?.let {
                 while (cursor.moveToNext()) {
