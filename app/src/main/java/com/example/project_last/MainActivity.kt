@@ -14,7 +14,8 @@ import com.example.project_last.databinding.MenuListBinding
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     companion object {
-        lateinit var adapter: HomeAdapter
+        var adapter: HomeAdapter? = null
+        var restList = ArrayList<Restaurent>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         initActivity()
-        var restList = db.getAllRestaurent()
+        restList = db.getAllRestaurent()
         // 데이터를 recycler view에 뿌린다.
         val listAdapter = HomeAdapter(restList)
         adapter = listAdapter
@@ -99,6 +100,7 @@ class HomeAdapter(val restList:ArrayList<Restaurent>) : RecyclerView.Adapter<Hom
         // image는 나중에 고려
         binding.homelayout.setOnClickListener {
             val intent = Intent(binding.root.context, ShowRestActivity::class.java)
+            intent.putExtra("PREACTIVITY", "home")
             intent.putExtra("rest_name", restList[position].rest_name)
             binding.root.context.startActivity(intent)
         }

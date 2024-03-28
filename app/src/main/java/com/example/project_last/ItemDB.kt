@@ -223,12 +223,10 @@ class ItemDB(context: Context):
                 isvisit = cursor.getInt(2)
                 menuList.add(cursor.getString(12))
             }
-            hashtagList = getRestHash(rest_name)
             diaryList.add(Diary(
                 date,
                 rest_star,
                 comment,
-                hashtagList,
                 isdelivery,
                 isvisit,
                 menuList

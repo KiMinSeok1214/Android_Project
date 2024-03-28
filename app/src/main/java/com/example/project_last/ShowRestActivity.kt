@@ -18,19 +18,21 @@ import com.example.project_last.databinding.ShowhasgtagListBinding
 
 class ShowRestActivity : BaseActivity() {
     val binding by lazy { ActivityShowRestBinding.inflate(layoutInflater) }
-    var diaryList = ArrayList<Diary>()
     companion object {
         lateinit var diaryadapter: DiaryAdapter
+        var diaryList = ArrayList<Diary>()
     }
     lateinit var hashtagadapter: HashtagAdapter
     lateinit var originalList: ArrayList<Diary>
     var rest_name: String? = null
+    var preactivity: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initActivity()
+        preactivity = intent.getStringExtra("PREACTIVITY")
         rest_name = intent.getStringExtra("rest_name")
         binding.tvRestname.text = rest_name
 
@@ -122,11 +124,12 @@ class ShowRestActivity : BaseActivity() {
             binding.ivDiarydelete.setOnClickListener {
                 db.deleteDiary(rest_name!!, diaryList[position].date)
                 diaryList.removeAt(position)
-                if (diaryList.isEmpty()) {
-                    MainActivity.adapter.notifyDataSetChanged()
-                    ShowAllActivity.adapter.notifyDataSetChanged()
-                }
                 notifyItemRemoved(position)
+                if (diaryList.isEmpty()) {
+                    onBackPressed()
+                    MainActivity.adapter?.notifyDataSetChanged()
+                    ShowAllActivity.adapter?.notifyDataSetChanged()
+                }
             }
         }
     }

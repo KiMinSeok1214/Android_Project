@@ -16,7 +16,6 @@ data class Diary(
     var date:String,
     var rest_star:Float,
     var rest_comment: String,
-    var hashtag: ArrayList<String>,
     var isdelivery: Int,
     var isvisit: Int,
     var menuList: ArrayList<String>

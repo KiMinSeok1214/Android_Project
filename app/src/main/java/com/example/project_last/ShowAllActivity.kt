@@ -20,7 +20,7 @@ import com.example.project_last.databinding.RestListBinding
 class ShowAllActivity : BaseActivity() {
     val binding by lazy { ActivityShowAllBinding.inflate(layoutInflater) }
     companion object {
-        lateinit var adapter: RestAdapter
+        var adapter: RestAdapter? = null
     }
     lateinit var restList:ArrayList<Restaurent>
     lateinit var originalList: ArrayList<Restaurent>
@@ -68,8 +68,8 @@ class ShowAllActivity : BaseActivity() {
             }
             // db에 제거할 restname 전달
             db.deleteRest(removeRestList)
-            adapter.notifyDataSetChanged()
-            MainActivity.adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
+            MainActivity.adapter?.notifyDataSetChanged()
         }
     }
 
@@ -85,7 +85,7 @@ class ShowAllActivity : BaseActivity() {
                             tmpList.add(rest)
                     }
                     restList = tmpList
-                    adapter.notifyDataSetChanged()
+                    adapter?.notifyDataSetChanged()
                 }
                 "배달" -> {
                     binding.btnType.text = "방문"
@@ -94,12 +94,12 @@ class ShowAllActivity : BaseActivity() {
                         if (rest.isdelivery == 0 && rest.isvisit == 1)
                             tmpList.add(rest)
                     restList = tmpList
-                    adapter.notifyDataSetChanged()
+                    adapter?.notifyDataSetChanged()
                 }
                 "방문" -> {
                     binding.btnType.text = "배달 + 방문"
                     restList = originalList
-                    adapter.notifyDataSetChanged()
+                    adapter?.notifyDataSetChanged()
                 }
             }
         }
@@ -116,7 +116,7 @@ class ShowAllActivity : BaseActivity() {
                 restList = originalList
                 binding.btnSort.text = "별점순"
             }
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -141,15 +141,15 @@ class ShowAllActivity : BaseActivity() {
 
             if (select_mode)
             {
-                adapter.mode = "select"
+                adapter?.mode = "select"
                 binding.btnDelete.visibility = View.VISIBLE
             }
             else {
-                adapter.mode = "normal"
+                adapter?.mode = "normal"
                 binding.btnDelete.visibility = View.INVISIBLE
                 for (item in restList)
                     item.selected = false
-                adapter.notifyDataSetChanged()
+                adapter?.notifyDataSetChanged()
             }
         }
     }

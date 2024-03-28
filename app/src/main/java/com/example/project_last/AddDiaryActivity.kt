@@ -21,8 +21,12 @@ import java.util.Random
 class AddDiaryActivity : BaseActivity() {
     var star_late:Float = 0.0F
     val binding by lazy { ActivityAddDiaryBinding.inflate(layoutInflater) }
-    val menuList = ArrayList<Item>()
+    val itemList = ArrayList<Item>()
+    val menuList = ArrayList<String>()
+    var rest_name:String? = null
     var preactivity: String? = null
+    var isdelivery: Int = 0
+    var isvisit: Int = 0
     lateinit var adapter: MenuAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +39,7 @@ class AddDiaryActivity : BaseActivity() {
         initActivity()
 
 
-        val rest_name = intent.getStringExtra("rest_name")
+        rest_name = intent.getStringExtra("rest_name")
         rest_name?.let {
             binding.etRestName.setText(rest_name)
         }
@@ -56,7 +60,7 @@ class AddDiaryActivity : BaseActivity() {
                 binding.etPrice.text.toString().toInt()
             } else { 0 }
 
-            menuList.add(Item(
+            itemList.add(Item(
                 rest_name = rest_name,
                 date = date.toString(),
                 rest_star = rest_star.toDouble(),
@@ -73,8 +77,10 @@ class AddDiaryActivity : BaseActivity() {
 
         binding.ivDiarysave.setOnClickListener {
             if (binding.etRestName.text.isNotEmpty()) {
-                for (menu in menuList)
-                    db.insertItem(menu)
+                for (item in itemList) {
+                    db.insertItem(item)
+                    menuList.add(item.menu_name)
+                }
                 if (preactivity == "home") {
                     val intent = Intent(this, MainActivity::class.java)
                     // stack 제거 후 호출
@@ -84,6 +90,15 @@ class AddDiaryActivity : BaseActivity() {
                 }
                 else {
                     onBackPressed()
+                    ShowRestActivity.diaryList.add(
+                        Diary(
+                            binding.tvDate.text.toString(),
+                            binding.ratingBar.rating,
+                            binding.etRestComment.text.toString(),
+                            isdelivery,
+                            isvisit,
+                            menuList
+                    ))
                     ShowRestActivity.diaryadapter.notifyDataSetChanged()
                     finish()
                 }
@@ -137,7 +152,7 @@ class AddDiaryActivity : BaseActivity() {
         binding.tvDate.text = "$year / ${month + 1} / $day"
 
         // menu list Recycler view adapter 연결
-        adapter = MenuAdapter(menuList)
+        adapter = MenuAdapter(itemList)
         binding.menuList.layoutManager = LinearLayoutManager(this)
         binding.menuList.adapter = adapter
 

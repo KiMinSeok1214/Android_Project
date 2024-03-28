@@ -42,6 +42,7 @@ class SearchActivity : BaseActivity() {
             itembinding.tvSearch.setOnClickListener {
                 val keyword = itembinding.tvSearch.text.toString() // 클릭한 항목의 검색어 텍스트 가져오기
                 val intent = Intent(this@SearchActivity, ShowAllActivity::class.java)
+                intent.putExtra("PREACTIVITY", "search")
                 intent.putExtra("KEYWORD", keyword) // 검색어 정보를 Intent에 추가
                 startActivity(intent)
             }
